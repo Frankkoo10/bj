@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Blackjack Pro - Completo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <aside class="instructions-panel">
+            <h2>REGLAS Y PAGOS</h2>
+            <p><strong>21+3:</strong> Trío 30:1, Esc 10:1, Col 5:1</p>
+            <p><strong>Pairs:</strong> Perf 25:1, Col 12:1, Mixto 6:1</p>
+            <p><strong>BJ:</strong> 3:2 | <strong>Win:</strong> 1:1</p>
+        </aside>
+        <main class="game-container">
+            <h1>BLACKJACK PRO</h1>
+            <div class="stats">SALDO: $<span id="balance">100000</span></div>
+            <div class="chip-selector">
+                <div class="selector-chip" data-value="25">$25</div>
+                <div class="selector-chip active" data-value="100">$100</div>
+                <div class="selector-chip" data-value="500">$500</div>
+                <div class="selector-chip" data-value="1000">$1k</div>
+                <div class="selector-chip" data-value="10000">$10k</div>
+            </div>
+            
+            <h3>DEALER (<span id="d-score">0</span>)</h3>
+            <div id="dealer-cards" class="cards-container"></div>
+            
+            <h3>JUGADOR (<span id="p-score">0</span>)</h3>
+            <div id="player-cards" class="cards-container"></div>
+            
+            <div class="betting-board">
+                <button class="bet-btn" onclick="addBet('main')">MAIN<br><span id="chip-main">$0</span></button>
+                <button class="bet-btn" onclick="addBet('21+3')">21+3<br><span id="chip-213">$0</span></button>
+                <button class="bet-btn" onclick="addBet('pairs')">PAIRS<br><span id="chip-pairs">$0</span></button>
+            </div>
+            <div class="controls">
+                <button id="repeat-btn" onclick="repeatBet()" disabled>REPETIR APUESTA</button>
+                <button id="deal-btn" onclick="deal()">REPARTIR</button>
+                <button id="hit-btn" onclick="hit()" disabled>PEDIR</button>
+                <button id="stand-btn" onclick="stand()" disabled>PLANTARSE</button>
+                <button id="double-btn" onclick="doubleDown()" disabled>DOBLAR</button>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
