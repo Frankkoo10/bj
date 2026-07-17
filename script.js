@@ -1,5 +1,68 @@
-let balance = 100000, currentBets = {main: 0, "21+3": 0, pairs: 0}, lastBets = {main: 0, "21+3": 0, pairs: 0}, pHand = [], dHand = [], deck = [], gameStarted = false;
+// ==========================================
+// 1. CONFIGURACIÓN DE SUPABASE
+// ==========================================
+const supabaseUrl = 'https://wgqqbahoalozgfukioza.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndncXFiYWhvYWxvemdmdWtpb3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyNTA3OTYsImV4cCI6MjA5OTgyNjc5Nn0.v_kpYceS8ceIUBNaLLHjfyBeFA2Y3lDRy7Yn6cb5Uz8';
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+let currentUser = null;
+let balance = 0; // El saldo ahora inicia en 0 hasta que Supabase lo cargue
+
+let currentBets = {main: 0, "21+3": 0, pairs: 0}, lastBets = {main: 0, "21+3": 0, pairs: 0}, pHand = [], dHand = [], deck = [], gameStarted = false;
 let selectedChipValue = 100;
+
+// ==========================================
+// 2. LÓGICA DE AUTENTICACIÓN Y SALDOS (SUPABASE)
+// ==========================================
+async function verificarSesionYJugar() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    
+    if (!session) {
+        // Redirigir al lobby si no está logueado
+        window.location.href = 'index.html'; 
+        return;
+    }
+    
+    currentUser = session.user;
+
+    // Buscamos su saldo en la tabla "perfiles"
+    const { data: perfilData } = await supabaseClient
+        .from('perfiles')
+        .select('saldo')
+        .eq('id', currentUser.id)
+        .single();
+
+    if (perfilData) {
+        balance = parseFloat(perfilData.saldo);
+    } else {
+        // Si no tiene perfil, le damos el bono inicial y lo creamos
+        balance = 10000; 
+        await guardarSaldoEnBD(); 
+    }
+
+    // Actualizamos el DOM una vez cargado el saldo
+    document.getElementById('balance').textContent = balance.toFixed(2);
+}
+
+// Función con UPSERT para actualizar el saldo en la BD
+async function guardarSaldoEnBD() {
+    if(!currentUser) return;
+    
+    await supabaseClient
+        .from('perfiles')
+        .upsert({ 
+            id: currentUser.id, 
+            saldo: balance 
+        });
+}
+
+// Inicializar el juego conectando con la base de datos al cargar la ventana
+window.onload = verificarSesionYJugar;
+
+
+// ==========================================
+// 3. LÓGICA DEL JUEGO BLACKJACK
+// ==========================================
 
 // Lógica para abrir y cerrar el menú emergente de reglas en celular
 function toggleModal(show) {
@@ -25,7 +88,8 @@ function addBet(type) {
         balance -= selectedChipValue;
         currentBets[type] += selectedChipValue;
         document.getElementById('chip-' + (type==='main'?'main':type==='21+3'?'213':'pairs')).textContent = `$${currentBets[type]}`;
-        document.getElementById('balance').textContent = balance;
+        document.getElementById('balance').textContent = balance.toFixed(2);
+        guardarSaldoEnBD(); // <-- GUARDAR EN SUPABASE
     } else {
         alert("Saldo insuficiente");
     }
@@ -49,7 +113,8 @@ function repeatBet() {
         document.getElementById('chip-main').textContent = `$${currentBets.main}`;
         document.getElementById('chip-213').textContent = `$${currentBets["21+3"]}`;
         document.getElementById('chip-pairs').textContent = `$${currentBets.pairs}`;
-        document.getElementById('balance').textContent = balance;
+        document.getElementById('balance').textContent = balance.toFixed(2);
+        guardarSaldoEnBD(); // <-- GUARDAR EN SUPABASE
     } else {
         alert("Saldo insuficiente para repetir la última apuesta");
     }
@@ -122,7 +187,9 @@ function doubleDown() {
     balance -= currentBets.main;
     currentBets.main *= 2;
     pHand.push(deck.pop());
-    document.getElementById('balance').textContent = balance;
+    document.getElementById('balance').textContent = balance.toFixed(2);
+    guardarSaldoEnBD(); // <-- GUARDAR EN SUPABASE LA APUESTA EXTRA
+    
     render();
     if (getVal(pHand) > 21) {
         setTimeout(() => {
@@ -140,22 +207,36 @@ function stand() {
     document.getElementById('double-btn').disabled = true;
     while (getVal(dHand) < 17) dHand.push(deck.pop());
     render();
+    
     setTimeout(() => {
         let p = getVal(pHand), d = getVal(dHand), side = resolveSideBets();
         let payout = side["21+3"] + side.pairs;
         let msg = side.msg || "";
         
+        // Reglas de pago
         if (p <= 21 && (d > 21 || p > d)) {
-            payout += currentBets.main * 2;
+            // Verificar si es un Blackjack natural (2 cartas = 21)
+            if (pHand.length === 2 && p === 21) {
+                payout += currentBets.main * 2.5; // Paga 3:2 (+ la apuesta devuelta)
+            } else {
+                payout += currentBets.main * 2; // Paga 1:1 (+ la apuesta devuelta)
+            }
             alert("¡Ganaste la mano! Dealer: " + d + " | Tú: " + p + "." + msg);
         } else if (p === d && p <= 21) {
-            payout += currentBets.main;
+            payout += currentBets.main; // Devuelve la apuesta
             alert("Empate. Dealer: " + d + " | Tú: " + p + "." + msg);
         } else {
             alert("Perdiste la mano. Dealer: " + d + " | Tú: " + p + "." + msg);
         }
+        
         balance += payout;
-        document.getElementById('balance').textContent = balance;
+        document.getElementById('balance').textContent = balance.toFixed(2);
+        
+        // Guardamos si hubo ganancias o retornos por empate
+        if(payout > 0) {
+            guardarSaldoEnBD(); // <-- GUARDAR GANANCIAS EN SUPABASE
+        }
+        
         reset();
     }, 200);
 }
