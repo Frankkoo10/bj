@@ -1,0 +1,369 @@
+body { 
+    background: radial-gradient(circle, #2a042a 0%, #100010 100%); 
+    color: #fff; 
+    font-family: 'Montserrat', sans-serif; 
+    display: flex; 
+    justify-content: center; 
+    padding: 20px; 
+    margin: 0;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+h1, h2, h3 {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 2px;
+    margin-top: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+h1 {
+    color: #ffd700;
+    font-size: 2.2rem;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.main-wrapper { 
+    display: flex; 
+    gap: 20px; 
+    width: 100%;
+    max-width: 980px; 
+    position: relative;
+}
+
+.game-container { 
+    background: linear-gradient(145deg, #2d0a2d, #1f051f); 
+    border: 3px solid #ffd700; 
+    padding: 25px; 
+    border-radius: 20px; 
+    flex: 1; 
+    text-align: center; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(255, 215, 0, 0.1);
+    position: relative;
+}
+
+.instructions-panel { 
+    background: linear-gradient(145deg, #2d0a2d, #1f051f); 
+    border: 2px solid #ffd700; 
+    padding: 20px; 
+    border-radius: 15px; 
+    width: 220px; 
+    font-size: 0.85rem; 
+    line-height: 1.6;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+    flex-shrink: 0;
+}
+
+.instructions-panel h2 {
+    font-size: 1.1rem;
+    color: #ffd700;
+    text-align: center;
+    border-bottom: 1px solid #ffd700;
+    padding-bottom: 8px;
+}
+
+.stats {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    margin-bottom: 15px;
+}
+
+.stats span {
+    color: #4caf50;
+}
+
+.cards-container { 
+    display: flex; 
+    justify-content: center; 
+    gap: 12px; 
+    margin: 10px 0 20px 0; 
+    min-height: 80px; 
+}
+
+.card { 
+    width: 55px; 
+    height: 80px; 
+    background: #fff; 
+    color: #111; 
+    border-radius: 6px; 
+    font-size: 1.2rem;
+    font-weight: 700; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.6);
+    border: 1px solid #ccc;
+}
+
+.card.red { 
+    color: #d32f2f; 
+}
+
+.chip-selector { 
+    display: flex; 
+    justify-content: center; 
+    gap: 12px; 
+    margin: 20px 0; 
+}
+
+.selector-chip { 
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+    border: 2px dashed #ffd700; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    font-weight: 700;
+    font-size: 0.85rem;
+    background: radial-gradient(circle, #4a004a 0%, #200020 100%);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+}
+
+.selector-chip:hover {
+    transform: translateY(-2px);
+}
+
+.selector-chip.active { 
+    border-style: solid; 
+    box-shadow: 0 0 15px #ffd700; 
+    background: radial-gradient(circle, #700070 0%, #3a003a 100%);
+    transform: scale(1.1);
+}
+
+.betting-board {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.bet-btn { 
+    background: linear-gradient(145deg, #550055, #330033); 
+    color: #ffd700; 
+    border: 2px solid #ffd700; 
+    padding: 12px 20px; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    min-width: 110px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+}
+
+.bet-btn:hover {
+    background: linear-gradient(145deg, #660066, #440044);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.bet-btn span {
+    display: block;
+    margin-top: 5px;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.controls button {
+    background: linear-gradient(145deg, #ffd700, #cca600);
+    color: #1a021a;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+}
+
+.controls button:hover:not(:disabled) {
+    background: linear-gradient(145deg, #ffe033, #e6bc00);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.6);
+}
+
+button:disabled { 
+    opacity: 0.3; 
+    cursor: not-allowed; 
+    transform: none !important;
+}
+
+/* --- BOTÓN Y MODAL DE REGLAS (EXCLUSIVO MÓVIL) --- */
+.info-btn {
+    display: none;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #2d0a2d, #1f051f);
+    border: 3px solid #ffd700;
+    padding: 25px;
+    border-radius: 15px;
+    width: 85%;
+    max-width: 350px;
+    text-align: left;
+    position: relative;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+}
+
+.modal-content h2 {
+    color: #ffd700;
+    font-size: 1.4rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.modal-content p, .modal-content ul {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.modal-content ul {
+    padding-left: 20px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px; right: 15px;
+    font-size: 1.8rem;
+    color: #ffd700;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* --- OPTIMIZACIONES PARA MÓVIL (MAS GRANDE Y CÓMODO) --- */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+
+    .instructions-panel {
+        display: none; /* Oculta reglas de PC */
+    }
+
+    /* Muestra botón "!" de reglas arriba a la derecha */
+    .info-btn {
+        display: block;
+        position: absolute;
+        top: 15px; right: 15px;
+        background: radial-gradient(circle, #ffd700, #cca600);
+        color: #1a021a;
+        font-family: 'Cinzel', serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+        width: 45px; height: 45px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+        z-index: 10;
+        cursor: pointer;
+    }
+
+    .game-container {
+        padding: 15px 10px;
+        border-width: 2px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+        margin-right: 40px; /* Evita chocar con el botón ! */
+    }
+
+    .stats {
+        font-size: 1.4rem;
+        padding: 10px 15px;
+        width: 80%;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+        margin-top: 10px;
+    }
+
+    /* Aumentar tamaño cartas al celular */
+    .cards-container {
+        min-height: 95px;
+        gap: 8px;
+    }
+    .card {
+        width: 65px;
+        height: 95px;
+        font-size: 1.5rem;
+        border-width: 2px;
+    }
+
+    /* Apuestas abajo e imponentes */
+    .betting-board {
+        gap: 8px;
+        margin: 15px 0 10px 0;
+    }
+    .bet-btn {
+        flex: 1;
+        min-width: unset;
+        padding: 15px 5px;
+        font-size: 1.1rem;
+    }
+    .bet-btn span {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #4caf50;
+    }
+
+    /* Selector de Fichas más grande y fácil de tocar */
+    .chip-selector {
+        gap: 8px;
+        margin: 15px 0;
+    }
+    .selector-chip {
+        width: 58px;
+        height: 58px;
+        font-size: 1rem;
+        border-width: 2px;
+    }
+
+    /* Botones de control anchos y cómodos */
+    .controls {
+        gap: 8px;
+    }
+    .controls button {
+        flex: 1 1 45%;
+        padding: 15px 10px;
+        font-size: 1.1rem;
+    }
+    #deal-btn, #repeat-btn {
+        flex: 1 1 100%; /* Repartir y Repetir toman el ancho completo */
+    }
+}

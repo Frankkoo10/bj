@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Blackjack Pro - Completo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <!-- Panel lateral en PC -->
+        <aside class="instructions-panel">
+            <h2>REGLAS Y PAGOS</h2>
+            <p><strong>21+3:</strong> Trío 30:1, Esc 10:1, Col 5:1</p>
+            <p><strong>Pairs:</strong> Perf 25:1, Col 12:1, Mixto 6:1</p>
+            <p><strong>BJ:</strong> 3:2 | <strong>Win:</strong> 1:1</p>
+        </aside>
+
+        <!-- Botón del menú de reglas en Celular -->
+        <button id="info-btn-mobile" class="info-btn" onclick="toggleModal(true)">!</button>
+
+        <main class="game-container">
+            <h1>BLACKJACK PRO</h1>
+            <div class="stats">SALDO: $<span id="balance">100000</span></div>
+            
+            <div class="table-area">
+                <h3>DEALER (<span id="d-score">0</span>)</h3>
+                <div id="dealer-cards" class="cards-container"></div>
+                
+                <h3>JUGADOR (<span id="p-score">0</span>)</h3>
+                <div id="player-cards" class="cards-container"></div>
+            </div>
+            
+            <div class="betting-board">
+                <button class="bet-btn" onclick="addBet('main')">MAIN<br><span id="chip-main">$0</span></button>
+                <button class="bet-btn" onclick="addBet('21+3')">21+3<br><span id="chip-213">$0</span></button>
+                <button class="bet-btn" onclick="addBet('pairs')">PAIRS<br><span id="chip-pairs">$0</span></button>
+            </div>
+
+            <div class="chip-selector">
+                <div class="selector-chip" data-value="25">$25</div>
+                <div class="selector-chip active" data-value="100">$100</div>
+                <div class="selector-chip" data-value="500">$500</div>
+                <div class="selector-chip" data-value="1000">$1k</div>
+                <div class="selector-chip" data-value="10000">$10k</div>
+            </div>
+            
+            <div class="controls">
+                <button id="repeat-btn" onclick="repeatBet()" disabled>REPETIR APUESTA</button>
+                <button id="deal-btn" onclick="deal()">REPARTIR</button>
+                <button id="hit-btn" onclick="hit()" disabled>PEDIR</button>
+                <button id="stand-btn" onclick="stand()" disabled>PLANTARSE</button>
+                <button id="double-btn" onclick="doubleDown()" disabled>DOBLAR</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Menú flotante (Modal) de reglas para el celular -->
+    <div id="rules-modal" class="modal-overlay" onclick="toggleModal(false)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+            <h2>REGLAS Y PAGOS</h2>
+            <hr>
+            <p><strong>21+3 (Poker + Blackjack):</strong></p>
+            <ul>
+                <li>Trío del mismo palo: <strong>30:1</strong></li>
+                <li>Escalera de color: <strong>10:1</strong></li>
+                <li>Color / Escalera simple: <strong>6:1 / 5:1</strong></li>
+            </ul>
+            <p><strong>Pairs (Pares iniciales):</strong></p>
+            <ul>
+                <li>Par perfecto (Mismo palo): <strong>25:1</strong></li>
+                <li>Par de color (Ej. Dos ♥/♦): <strong>12:1</strong></li>
+                <li>Par mixto: <strong>6:1</strong></li>
+            </ul>
+            <hr>
+            <p><strong>Apuesta Principal (Main):</strong></p>
+            <p>Blackjack natural paga <strong>3:2</strong> | Victoria normal paga <strong>1:1</strong></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
