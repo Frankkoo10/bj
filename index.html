@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Script de Supabase para poder leer/guardar el saldo -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="main-wrapper">
@@ -24,7 +27,8 @@
 
         <main class="game-container">
             <h1>BLACKJACK PRO</h1>
-            <div class="stats">SALDO: $<span id="balance">100000</span></div>
+            <!-- El saldo inicial dirá CARGANDO hasta que Supabase responda -->
+            <div class="stats">SALDO: $<span id="balance">CARGANDO...</span></div>
             
             <div class="table-area">
                 <h3>DEALER (<span id="d-score">0</span>)</h3>
