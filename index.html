@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Blackjack Live - Infinite Table</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <a href="#" class="top-logo" onclick="window.location.reload();">
+        <img src="logo.png" alt="Casino Logo" />
+    </a>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <div class="main-wrapper">
+        <aside class="instructions-panel">
+            <h2>REGLAS Y PAGOS</h2>
+            <p><strong>21+3:</strong> Trío 30:1, Esc 10:1, Color 6:1, Esc 5:1</p>
+            <p><strong>Pairs:</strong> Perf 25:1, Col 12:1, Mixto 6:1</p>
+            <p><strong>BJ:</strong> 3:2 | <strong>Win:</strong> 1:1</p>
+            <p><strong>Mano Comunitaria:</strong> Todos juegan la misma mano. Si te plantas, las cartas que pidan los demás no te afectan (se verán grises).</p>
+        </aside>
+
+        <button id="info-btn-mobile" class="info-btn" onclick="toggleModal(true)">
+            <img src="info.png" alt="Info" class="btn-icon">
+        </button>
+
+        <main class="game-container">
+            <div class="top-info">
+                <div class="online-indicator">
+                    <span class="dot"></span> <span id="online-count-value">1</span> Jugadores en Sala
+                </div>
+            </div>
+
+            <h1>INFINITE BLACKJACK</h1>
+            <div class="stats">SALDO: $<span id="balance">0</span></div>
+            
+            <div id="game-status" class="game-status">CONECTANDO A LA MESA...</div>
+            <div id="sub-status" class="sub-status"></div>
+
+            <div class="table-area">
+                <div class="dealer-area">
+                    <div class="live-table-stats" id="live-table-stats">
+                        <span class="stat-item"><img src="jugador.png" class="stat-img" alt="Jugando"><span id="stat-playing">0</span></span>
+                        <span class="stat-item"><img src="mas.png" class="stat-img" alt="Pidieron"><span id="stat-hit">0</span></span>
+                        <span class="stat-item"><img src="menos.png" class="stat-img" alt="Plantados"><span id="stat-stand">0</span></span>
+                    </div>
+
+                    <div class="shoe-container">
+                        <img src="shoe.png" alt="Sabot">
+                    </div>
+                    <h3>DEALER (<span id="d-score">0</span>)</h3>
+                    <div id="dealer-cards" class="cards-container"></div>
+                </div>
+                
+                <h3>TU MANO: <span id="my-score">0</span> <span style="font-size:0.7rem; color:#888;">(Comunidad: <span id="c-score">0</span>)</span></h3>
+                <div id="player-hands-wrapper" class="hands-wrapper">
+                    <div class="hand-container active" id="community-hand">
+                        <!-- Cartas de la comunidad -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="betting-board">
+                <button class="bet-btn" onclick="addBet('main')">MAIN<br><span id="chip-main">$0</span></button>
+                <button class="bet-btn" onclick="addBet('21+3')">21+3<br><span id="chip-213">$0</span></button>
+                <button class="bet-btn" onclick="addBet('pairs')">PAIRS<br><span id="chip-pairs">$0</span></button>
+            </div>
+
+            <div class="chip-selector">
+                <div class="selector-chip" data-value="25">$25</div>
+                <div class="selector-chip active" data-value="100">$100</div>
+                <div class="selector-chip" data-value="500">$500</div>
+                <div class="selector-chip" data-value="1000">$1k</div>
+                <div class="selector-chip" data-value="10000">$10k</div>
+            </div>
+            
+            <div class="controls">
+                <button id="repeat-btn" onclick="repeatBet()" disabled>REPETIR</button>
+                <button id="clear-btn" onclick="clearBets()">BORRAR</button>
+                <button id="deal-btn" onclick="confirmBet()" disabled>CONFIRMAR</button>
+                <button id="hit-btn" onclick="sendAction('hit')" disabled>PEDIR</button>
+                <button id="stand-btn" onclick="sendAction('stand')" disabled>PLANTARSE</button>
+                <button id="double-btn" onclick="sendAction('double')" disabled>DOBLAR</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="rules-modal" class="modal-overlay" onclick="toggleModal(false)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="toggleModal(false)">
+                <img src="close.png" alt="Cerrar" class="btn-icon">
+            </span>
+            <h2>REGLAS Y PAGOS</h2>
+            <hr>
+            <p><strong>21+3:</strong> Trío mismo palo 30:1 | Esc Color 10:1 | Color 6:1 | Esc 5:1</p>
+            <p><strong>Pairs:</strong> Par perfecto 25:1 | Color 12:1 | Mixto 6:1</p>
+            <p><strong>Opciones:</strong> BJ 3:2 | Doblar x2 ap. | Mano Compartida</p>
+        </div>
+    </div>
+
+    <!-- CHAT EN VIVO -->
+    <button id="chat-toggle-btn" class="chat-toggle-btn" onclick="toggleChat()">
+        <img src="chat.png" alt="Chat" class="btn-icon"> Chat
+    </button>
+    <div id="chat-popup" class="chat-popup">
+        <div class="chat-header">
+            <span>Chat en Vivo</span>
+            <button class="chat-close-btn" onclick="toggleChat()">
+                <img src="close.png" alt="Cerrar" class="btn-icon">
+            </button>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input-group">
+            <input type="text" id="chat-input" placeholder="Escribe un mensaje..." onkeypress="manejarEnterChat(event)" autocomplete="off">
+            <button id="btn-send-chat" onclick="enviarMensajeChat()">Enviar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
