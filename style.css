@@ -1,0 +1,148 @@
+:root {
+    --bg: #120613; 
+    --panel: #31162a; 
+    --panel-strong: #22101b;
+    --muted: #cbbfae; 
+    --accent: #ffd24d; 
+    --outline: #ffd100;
+    --success: #32d74b;
+    --danger: #dc3545;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body { 
+    background-color: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; 
+    display: flex; justify-content: center; padding: 20px; margin: 0; min-height: 100vh;
+}
+
+.btn-icon { width: 20px; height: 20px; object-fit: contain; display: inline-block; vertical-align: middle; transform: scale(2.5); }
+
+.top-logo {
+    position: absolute; top: 16px; left: 16px; width: 60px; height: 60px;
+    border-radius: 12px; overflow: hidden; box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    z-index: 100; transition: transform 0.12s ease; background: var(--panel-strong);
+}
+.top-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.top-logo:hover { transform: translateY(-3px); }
+
+.toast-container { position: fixed; top: 25%; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast-msg { background: rgba(0, 0, 0, 0.9); color: #fff; padding: 15px 30px; border-radius: 10px; font-size: 1.3rem; font-weight: bold; text-align: center; border: 2px solid; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); transition: opacity 0.5s ease; }
+.toast-msg.win { border-color: var(--success); color: var(--success); box-shadow: 0 0 20px rgba(50,215,75,0.4); }
+.toast-msg.lose { border-color: var(--danger); color: var(--danger); box-shadow: 0 0 20px rgba(220,53,69,0.4); }
+@keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 2px; margin-top: 0; }
+h1 { color: var(--accent); font-size: 2.2rem; border-bottom: 1px solid rgba(255, 209, 80, 0.2); padding-bottom: 10px; margin-bottom: 10px; }
+h3 { margin-bottom: 5px; }
+
+.main-wrapper { display: flex; gap: 20px; width: 100%; max-width: 980px; position: relative; }
+.game-container { background-color: var(--panel); border: 2px solid rgba(255,209,80,0.15); padding: 25px; border-radius: 20px; flex: 1; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative; }
+.instructions-panel { background-color: var(--panel-strong); border: 1px solid rgba(255,209,80,0.1); padding: 20px; border-radius: 15px; width: 220px; font-size: 0.85rem; box-shadow: 0 10px 20px rgba(0,0,0,0.6); flex-shrink: 0; }
+.instructions-panel h2 { font-size: 1.1rem; color: var(--accent); text-align: center; border-bottom: 1px solid var(--accent); padding-bottom: 8px; }
+
+.top-info { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+.online-indicator { background-color: rgba(0,0,0,0.35); padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; color: var(--muted); border: 1px solid rgba(255,209,80,0.06); display: flex; align-items: center; gap: 6px; }
+.online-indicator .dot { width: 8px; height: 8px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 6px var(--success); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { opacity:1; } 50% { opacity:0.3; } 100% { opacity:1; } }
+
+.game-status { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; font-size: 1.1rem; font-weight: bold; color: var(--outline); border: 1px solid var(--accent); margin-bottom: 5px; letter-spacing: 1px; }
+.sub-status { font-size: 0.85rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; min-height: 18px; }
+.stats { font-size: 1.2rem; font-weight: 700; color: #fff; background: rgba(0, 0, 0, 0.4); padding: 10px 20px; border-radius: 8px; display: inline-block; border: 1px solid rgba(50,215,75,0.3); margin-bottom: 15px; }
+.stats span { color: var(--success); }
+
+/* Área de mesa, Sabot y Cartas */
+.table-area { position: relative; padding-top: 20px; margin-bottom: 20px; }
+.dealer-area { position: relative; min-height: 140px; }
+
+.live-table-stats { 
+    position: absolute; top: -30px; right: 10px; left: auto; transform: none;
+    background: rgba(0,0,0,0.8); padding: 4px 10px; border-radius: 12px;
+    color: var(--outline); font-weight: bold; font-size: 0.75rem;
+    border: 1px solid rgba(255,209,80,0.4); display: flex; gap: 10px; z-index: 10;
+}
+.stat-item { display: flex; align-items: center; gap: 4px; }
+.stat-img { width: 12px; height: 12px; object-fit: contain; transform: scale(2.3);}
+
+.shoe-container {
+    position: absolute; top: 0; right: 10px; width: 75px; height: 95px;
+    background: linear-gradient(145deg, #1a0a16, #2c1224); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid #5a354c; box-shadow: inset 0 0 15px #000, 0 8px 12px rgba(0,0,0,0.5);
+    z-index: 5;
+}
+.shoe-container img { width: 50px; opacity: 0.9; filter: drop-shadow(0 4px 6px black); }
+
+.cards-container { display: flex; justify-content: center; gap: 8px; margin: 10px 0; min-height: 100px; }
+.card-img { width: 70px; height: 100px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); animation: slideDown 0.3s ease-out forwards; }
+@keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* Manos del jugador */
+.hands-wrapper { display: flex; justify-content: center; margin: 10px 0 20px 0; min-height: 120px; }
+.hand-container { 
+    display: flex; gap: 8px; position: relative; padding: 10px 15px; border-radius: 12px; 
+    transition: all 0.3s ease; border: 2px solid transparent; min-width: 100px; justify-content: center;
+}
+.hand-container.active { border-color: var(--success); background: rgba(50,215,75,0.1); box-shadow: 0 0 15px rgba(50,215,75,0.2); }
+.card-dimmed { opacity: 0.4; filter: grayscale(80%); transform: scale(0.95); transition: all 0.3s; }
+
+/* Fichas y Controles */
+.chip-selector { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
+.selector-chip { width: 55px; height: 55px; border-radius: 50%; border: 3px dashed rgba(255, 255, 255, 0.35); display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: 800; font-size: 0.9rem; background: radial-gradient(circle at 35% 35%, #7b2cbf 0%, #480ca8 60%, #3a0ca3 100%); box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 6px 14px rgba(0,0,0,0.5), inset 0 3px 6px rgba(255,255,255,0.25); color: var(--accent); text-shadow: 0 2px 4px rgba(0,0,0,0.6); transition: all 0.2s ease; }
+.selector-chip[data-value="500"] { background: radial-gradient(circle at 35% 35%, #9d4edd 0%, #6b11bc 60%, #4b0082 100%); }
+.selector-chip[data-value="1000"] { background: radial-gradient(circle at 35% 35%, #c77dff 0%, #8900f2 60%, #560bad 100%); }
+.selector-chip[data-value="10000"] { background: radial-gradient(circle at 35% 35%, #560bad 0%, #3f0371 60%, #240046 100%); border-color: rgba(255, 215, 0, 0.5); }
+.selector-chip:hover { transform: scale(1.1); }
+.selector-chip.active { border-style: solid; border-color: var(--outline); box-shadow: 0 0 15px var(--accent); transform: scale(1.15); }
+
+.betting-board { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+.bet-btn { background: rgba(0,0,0,0.2); color: var(--muted); border: 1px solid rgba(255,209,80,0.2); padding: 12px 20px; border-radius: 10px; cursor: pointer; font-family: inherit; font-weight: 600; min-width: 110px; transition: all 0.2s ease; }
+.bet-btn:hover { background: rgba(255,209,80,0.05); }
+.bet-btn span { display: block; margin-top: 5px; font-size: 1.1rem; color: var(--accent); font-weight: bold; }
+
+.controls { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.controls button { background: var(--outline); color: #140612; border: none; padding: 12px 18px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 800; font-size: 0.9rem; transition: all 0.2s ease; }
+.controls button:hover:not(:disabled) { background: var(--accent); transform: translateY(-2px); }
+.controls button:disabled { background-color: #4f4f64 !important; color: #a0a0a0 !important; cursor: not-allowed; opacity: 0.8; transform: none; }
+
+/* Chat y Extras */
+.chat-toggle-btn { position: fixed; bottom: 24px; right: 24px; background: var(--outline); color: #140612; border: none; border-radius: 30px; padding: 12px 20px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: center; gap: 8px; }
+.chat-popup { position: fixed; bottom: 80px; right: 24px; width: 320px; height: 350px; background-color: var(--panel-strong); border: 1px solid rgba(255,209,80,0.15); border-radius: 12px; display: none; flex-direction: column; box-shadow: 0 8px 24px rgba(0,0,0,0.6); z-index: 99; }
+.chat-header { background: rgba(0,0,0,0.4); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,209,80,0.06); font-weight: bold; color: var(--accent); }
+.chat-close-btn { background: transparent; border: none; cursor: pointer; display: flex; align-items: center; padding: 0; }
+.chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.chat-msg { font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+.chat-msg .user { font-weight: bold; color: var(--accent); margin-right: 4px; }
+.chat-input-group { display: flex; border-top: 1px solid rgba(255,209,80,0.06); background: rgba(0,0,0,0.2); }
+#chat-input { flex: 1; background: transparent; border: none; padding: 12px; color: #fff; outline: none; font-size: 14px; }
+#btn-send-chat { background: var(--outline); color: #140612; border: none; padding: 0 16px; font-weight: bold; cursor: pointer; }
+.info-btn { display: none; }
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
+.modal-content { background-color: var(--panel); border: 2px solid var(--accent); padding: 25px; border-radius: 15px; width: 85%; max-width: 350px; text-align: left; position: relative; }
+.modal-content h2 { color: var(--accent); font-size: 1.4rem; text-align: center; margin-bottom: 10px; }
+.modal-content p, .modal-content ul { font-size: 0.95rem; line-height: 1.5; color: #fff; margin-bottom: 8px; }
+.close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; display: flex; align-items: center; }
+
+@media (max-width: 768px) {
+    body { padding: 5px; }
+    .top-logo { width: 45px; height: 45px; top: 10px; left: 10px; }
+    .instructions-panel { display: none; }
+    .info-btn { display: flex; align-items: center; justify-content: center; position: absolute; top: 10px; right: 10px; background: var(--accent); width: 40px; height: 40px; border-radius: 50%; border: none; z-index: 10; }
+    .game-container { padding: 15px 10px; margin-top: 40px; }
+    h1 { font-size: 1.5rem; }
+    
+    .shoe-container { top: -20px; right: -5px; width: 60px; height: 80px; }
+    .shoe-container img { width: 40px; }
+    
+    .live-table-stats { top: -45px; right: -5px; gap: 6px; padding: 4px 8px; font-size: 0.7rem; }
+    .stat-img { width: 10px; height: 10px; }
+    
+    .stats { font-size: 1.2rem; width: 100%; }
+    .card-img { width: 55px; height: 80px; }
+    .betting-board { gap: 8px; }
+    .bet-btn { flex: 1; min-width: unset; padding: 10px 5px; font-size: 0.9rem; }
+    .controls button { flex: 1 1 45%; padding: 12px 5px; }
+    #deal-btn, #repeat-btn { flex: 1 1 100%; }
+    .chat-toggle-btn { bottom: 10px; right: 10px; padding: 10px; font-size: 14px; }
+    .chat-popup { bottom: 0; right: 0; width: 100%; height: 400px; border-radius: 16px 16px 0 0; }
+}
